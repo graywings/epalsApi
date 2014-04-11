@@ -1,5 +1,5 @@
 {
-    "name": "epals/epalsapi",
+    "name": "graywings/epalsApi",
     "require": {
         
         "elasticsearch/elasticsearch": "~0.4"
