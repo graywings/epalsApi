@@ -2,6 +2,7 @@
     "name": "graywings/epalsApi",
     "require": {
         
+	    "evernote/evernote": "1.25.0",
         "elasticsearch/elasticsearch": "~0.4"
     },
     "autoload": {
