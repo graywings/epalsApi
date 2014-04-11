@@ -4,6 +4,10 @@ namespace ePals;
 use \ePals\Base\Record;
 use \ePals\Base\User;
 use \Exception;
+use \ePals\EvernoteHandle;
+
+//tem use :require_once
+//require_once __DIR__."/evernoteInterface/evernoteApi/evernoteApi.php";
 
 class UserAttribute extends Record {
     
@@ -11,6 +15,15 @@ class UserAttribute extends Record {
     protected $attributes;
     private $mode;
     private $sis_server;
+    private $evernoteHandler;
+    
+    public function initEvernoteHandler($accessToken){
+        $this->evernoteHandler = new \EvernoteHandler($accessToken);            
+    }
+    
+    public function getEvernoteHandler(){
+        return $this->evernoteHandler;
+    }
     
     public function get_SIS_Server() {
         return $this->sis_server;
@@ -72,4 +85,6 @@ class UserAttribute extends Record {
         }
         return $this->attributes[$key];
     }
+
+
 }
