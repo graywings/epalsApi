@@ -1,9 +1,7 @@
 <?php
 
 namespace ePals;
-//require_once dirname(__DIR__).'/evernote-sdk-php-master/vendor/autoload.php';
 
-//require_once __DIR__."/functions.php";
 
 
 use EDAM\Types\Data, EDAM\Types\Note, EDAM\Types\Notebook, EDAM\Types\Resource, EDAM\Types\ResourceAttributes,
@@ -12,19 +10,58 @@ use EDAM\Error\EDAMUserException, EDAM\Error\EDAMErrorCode;
 use Evernote\Client;
 
 
+//delvelopment key and secret
+//define('OAUTH_CONSUMER_KEY', 'jiatq');
+//define('OAUTH_CONSUMER_SECRET', 'c89ca981271a8b60');
+//define('SANDBOX', TRUE);
+
 class EvernoteHandler{
     
     protected $accessToken ;
     protected $client ;
     protected $noteStore ;
+    protected $developClient ;
     
     function __construct($accessToken) {
         
         $this->accessToken = $accessToken ;
         $this->client = new Client(array(
-            'token' => $this->accessToken,
-            'sandbox' => true));
+            'token' => $this->accessToken, //agent user token
+            'sandbox' => true,
+            'consumerKey' => 'jiatq', //developer key
+            'consumerSecret' => 'c89ca981271a8b60' //developer secret
+        ));
         $this->noteStore = $this->client->getNoteStore();
+
+    }
+    
+    //param: authorize success callback url
+    public function authorize($callback){
+        
+        if(isset($callback)){
+            $requestTokenInfo = $this->client->getRequestToken($callback());
+        }else{
+            $requestTokenInfo = $this->client->getRequestToken(self::getSelfCallbackUrl());
+        }
+        if ($requestTokenInfo) {
+            
+            $_SESSION['requestToken'] = $requestTokenInfo['oauth_token'];
+            $_SESSION['requestTokenSecret'] = $requestTokenInfo['oauth_token_secret'];
+
+            $urlAuthorize = $this->client->getAuthorizeUrl($_SESSION['requestToken']);
+            header("Location: ".$urlAuthorize); 
+            exit ;
+        } 
+    }
+    
+    static function getSelfCallbackUrl()
+    {
+        $thisUrl = (empty($_SERVER['HTTPS'])) ? "http://" : "https://";
+        $thisUrl .= $_SERVER['SERVER_NAME'];
+        $thisUrl .= ($_SERVER['SERVER_PORT'] == 80 || $_SERVER['SERVER_PORT'] == 443) ? "" : (":".$_SERVER['SERVER_PORT']);
+        $thisUrl .= $_SERVER['SCRIPT_NAME'];
+        $thisUrl .= '?action=callback';
+        return $thisUrl;
     }
 
     public function queryNote($filter,$offset = 0,$maxNotes = 100){
