@@ -26,7 +26,7 @@ Class Record {
     }
     
     function __construct() {
-        $this->tenant = 'community.epals.com';
+        $this->tenant = 'epals.com';
         $this->name = strtolower(get_called_class());
     }
     

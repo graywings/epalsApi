@@ -68,7 +68,7 @@ class Rest {
     private function CurlURL($ops, $server, $path, $params, $postdata=null) {
         $url = $server . $path . "?" . (strlen($params) == 0 ? "" : $params . "&") . "format=json";
         $ch = curl_init();
-        curl_setopt ($ch, CURLOPT_TIMEOUT, 20);
+        curl_setopt ($ch, CURLOPT_TIMEOUT, 200000);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', 'Accept: application/json'));
         curl_setopt($ch, CURLOPT_URL, $url);

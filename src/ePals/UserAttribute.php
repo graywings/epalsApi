@@ -18,8 +18,9 @@ class UserAttribute extends Record {
     private $evernoteHandler;
     
     public function initEvernoteHandler($accessToken){
-        $this->evernoteHandler = new EvernoteHandler($accessToken);            
+        $this->evernoteHandler = new EvernoteHandler($accessToken);
     }
+
     
     public function getEvernoteHandler(){
         return $this->evernoteHandler;
